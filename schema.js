@@ -53,8 +53,28 @@ const RootQueryType = new GraphQLObjectType({
     })
 })
 
+const MutationType = new GraphQLObjectType({
+    name: 'Mutation',
+    description: "Root Mutation",
+    fields: () => ({
+        removeABook: {
+            type: new GraphQLList(BookType),
+            description: "Remove a book",
+            args: {bookId: {type: new GraphQLNonNull(GraphQLInt)}} ,
+            resolve: (_, {bookId}) => {
+                const deletedIndex = books.findIndex(book => book.id == bookId)
+                if (deletedIndex != -1) {
+                    books.splice(deletedIndex, 1)
+                }
+                return books
+            }
+        }
+    })
+})
+
 const bookSchema = new GraphQLSchema({
-    query: RootQueryType
+    query: RootQueryType,
+    mutation: MutationType
 })
 
 module.exports = bookSchema
