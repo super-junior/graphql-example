@@ -68,6 +68,19 @@ const MutationType = new GraphQLObjectType({
                 }
                 return books
             }
+        },
+        changeAuthorName: {
+            type: AuthorType,
+            description: "Change author name",
+            args: {
+                authorId: {type: new GraphQLNonNull(GraphQLInt)},
+                newName: {type: new GraphQLNonNull(GraphQLString)}
+            },
+            resolve: (_, {authorId, newName}) => {
+                const changingIndex = authors.findIndex(author => author.id == authorId)
+                authors[changingIndex].name = newName
+                return authors[changingIndex]
+            }
         }
     })
 })
