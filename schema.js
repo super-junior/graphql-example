@@ -1,4 +1,4 @@
-const books = require('./library')
+const {books, authors} = require('./library')
 
 const {
     GraphQLSchema,
@@ -19,6 +19,15 @@ const BookType = new GraphQLObjectType({
     })
 })
 
+const AuthorType = new GraphQLObjectType({
+    name: "Authors",
+    description: "This is an author",
+    fields: () => ({
+        id: {type: new GraphQLNonNull(GraphQLInt)},
+        name: {type: new GraphQLNonNull(GraphQLString)}
+    })
+})
+
 const RootQueryType = new GraphQLObjectType({
     name: 'Query',
     description: "Root Query",
@@ -27,6 +36,11 @@ const RootQueryType = new GraphQLObjectType({
             type: new GraphQLList(BookType),
             description: "List of All Books",
             resolve: () => books
+        },
+        authors:{
+            type: new GraphQLList(AuthorType),
+            description: "List of All Authors",
+            resolve: () => authors
         }
     })
 })
