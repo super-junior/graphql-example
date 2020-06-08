@@ -15,7 +15,11 @@ const BookType = new GraphQLObjectType({
     fields: () => ({
         id: {type: new GraphQLNonNull(GraphQLInt)},
         name: {type: new GraphQLNonNull(GraphQLString)},
-        authorId: {type: new GraphQLNonNull(GraphQLInt)}
+        authorId: {type: new GraphQLNonNull(GraphQLInt)},
+        author: {
+            type: AuthorType,
+            resolve: (book) => authors.find(author => author.id === book.authorId)
+        }
     })
 })
 
@@ -24,7 +28,11 @@ const AuthorType = new GraphQLObjectType({
     description: "This is an author",
     fields: () => ({
         id: {type: new GraphQLNonNull(GraphQLInt)},
-        name: {type: new GraphQLNonNull(GraphQLString)}
+        name: {type: new GraphQLNonNull(GraphQLString)},
+        book: {
+            type: new GraphQLList(BookType),
+            resolve: (author) => books.filter(book => book.authorId === author.id)
+        }
     })
 })
 
