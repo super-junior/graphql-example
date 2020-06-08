@@ -9,17 +9,6 @@ const bookSchema = require('./schema')
 app.use(bodyParser.json())
 app.listen(5000, () => console.log("Server is running"))
 
-// GraphQL
-app.get('/graphql', expressGraphQL({
-    schema: bookSchema,
-    graphiql: true
-}))
-
-app.post('/graphql', expressGraphQL({
-    schema: bookSchema,
-    graphiql: false
-}))
-
 // REST
 app.get('/books/:id', (req, res) => {
     res.json(books.find(book => book.id == req.params.id))
