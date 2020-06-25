@@ -1,4 +1,4 @@
-const {books, authors} = require('./library')
+const { books, authors } = require('./library')
 
 const {
     GraphQLSchema,
@@ -13,9 +13,9 @@ const BookType = new GraphQLObjectType({
     name: "Books",
     description: "This represents a book written by an author",
     fields: () => ({
-        id: {type: new GraphQLNonNull(GraphQLInt)},
-        name: {type: new GraphQLNonNull(GraphQLString)},
-        authorId: {type: new GraphQLNonNull(GraphQLInt)},
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        authorId: { type: new GraphQLNonNull(GraphQLInt) },
         author: {
             type: AuthorType,
             resolve: (book) => authors.find(author => author.id === book.authorId)
@@ -27,8 +27,8 @@ const AuthorType = new GraphQLObjectType({
     name: "Authors",
     description: "This is an author",
     fields: () => ({
-        id: {type: new GraphQLNonNull(GraphQLInt)},
-        name: {type: new GraphQLNonNull(GraphQLString)},
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
         book: {
             type: new GraphQLList(BookType),
             resolve: (author) => books.filter(book => book.authorId === author.id)
@@ -45,12 +45,14 @@ const RootQueryType = new GraphQLObjectType({
             description: "List of All Books",
             resolve: () => books
         },
-        authors:{
+        authors: {
             type: new GraphQLList(AuthorType),
             description: "List of All Authors",
             resolve: () => authors
-        }
+        },
+
     })
+
 })
 
 const MutationType = new GraphQLObjectType({
@@ -60,8 +62,8 @@ const MutationType = new GraphQLObjectType({
         removeABook: {
             type: new GraphQLList(BookType),
             description: "Remove a book",
-            args: {bookId: {type: new GraphQLNonNull(GraphQLInt)}} ,
-            resolve: (_, {bookId}) => {
+            args: { bookId: { type: new GraphQLNonNull(GraphQLInt) } },
+            resolve: (_, { bookId }) => {
                 const deletedIndex = books.findIndex(book => book.id == bookId)
                 if (deletedIndex != -1) {
                     books.splice(deletedIndex, 1)
@@ -73,10 +75,10 @@ const MutationType = new GraphQLObjectType({
             type: AuthorType,
             description: "Change author name",
             args: {
-                authorId: {type: new GraphQLNonNull(GraphQLInt)},
-                newName: {type: new GraphQLNonNull(GraphQLString)}
+                authorId: { type: new GraphQLNonNull(GraphQLInt) },
+                newName: { type: new GraphQLNonNull(GraphQLString) }
             },
-            resolve: (_, {authorId, newName}) => {
+            resolve: (_, { authorId, newName }) => {
                 const changingIndex = authors.findIndex(author => author.id == authorId)
                 authors[changingIndex].name = newName
                 return authors[changingIndex]
